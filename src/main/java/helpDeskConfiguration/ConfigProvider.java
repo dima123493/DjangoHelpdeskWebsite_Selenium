@@ -9,9 +9,9 @@ public interface ConfigProvider {
     }
 
     String MAIN_URL = readConfig().getString("mainUrl");
+    String NEW_TICKET_PAGE = readConfig().getString("newTicketPageUrl");
     String LOGIN_URL = readConfig().getString("loginUrl");
     String ALL_TICKETS_URL = readConfig().getString("allTicketsUrl");
-
     String USER_LOGIN = readConfig().getString("usersParams.user.login");
     String USER_PASSWORD = readConfig().getString("usersParams.user.password");
 }

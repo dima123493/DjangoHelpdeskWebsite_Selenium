@@ -28,7 +28,10 @@ public class LoginPage {
         rememberPasswordCheckbox.click();
         return this;
     }
-
+    public LoginPage loginButtonFailedTest() {
+        loginButton.click();
+        return this;
+    }
     public AllTicketsPage loginButton() {
         loginButton.click();
         return new AllTicketsPage();

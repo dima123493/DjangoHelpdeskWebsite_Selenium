@@ -5,7 +5,7 @@ import org.openqa.selenium.support.FindBy;
 
 import static utils.StringUniqualizer.futureTime;
 
-public class CreateTicketPage {
+public class NewTicketPage {
     @FindBy(id = "id_queue")
     public WebElement queueField;
     @FindBy(xpath = "//*[@id=\"id_queue\"]/option[2]")
@@ -24,52 +24,46 @@ public class CreateTicketPage {
     public WebElement emailSubmit;
     @FindBy(xpath = "//button[@type='submit']")
     public WebElement submitButton;
-    @FindBy(xpath = "//input[@name='ticket']")
-    public WebElement ticketField;
-    @FindBy(xpath = "//input[@name='email']")
-    public WebElement emailToCheck;
-    @FindBy(xpath = "//input[@value='View Ticket']")
-    public WebElement viewTicketButton;
 
-    public CreateTicketPage queueField() {
+    public NewTicketPage queueField() {
         queueField.click();
         return this;
     }
 
-    public CreateTicketPage selectBillingQueries() {
+    public NewTicketPage selectBillingQueries() {
         billingQueries.click();
         return this;
     }
 
-    public CreateTicketPage selectProductIssueOption() {
+    public NewTicketPage selectProductIssueOption() {
         productIssueOption.click();
         return this;
     }
 
-    public CreateTicketPage problemSummary(String summaryText) {
+    public NewTicketPage problemSummary(String summaryText) {
         problemSummary.click();
         problemSummary.sendKeys(summaryText);
         return this;
     }
 
-    public CreateTicketPage problemDescription(String problemText) {
+    public NewTicketPage problemDescription(String problemText) {
         problemDescription.click();
         problemDescription.sendKeys(problemText);
         return this;
     }
 
-    public CreateTicketPage priority() {
+    public NewTicketPage priority() {
         priority.click();
         return this;
     }
 
-    public CreateTicketPage deadLine() {
+    public NewTicketPage deadLine() {
         deadLine.click();
         deadLine.sendKeys(futureTime());
         return this;
     }
 
-    public CreateTicketPage emailSubmit(String email) {
+    public NewTicketPage emailSubmit(String email) {
         emailSubmit.click();
         emailSubmit.sendKeys(email);
         return this;
@@ -80,32 +74,4 @@ public class CreateTicketPage {
         return new CreatedTicketDetails();
     }
 
-    public CreateTicketPage ticketField(String ticketTitle) {
-        ticketField.click();
-        ticketField.sendKeys(ticketTitle);
-        return this;
-    }
-
-    public CreateTicketPage emailToCheck(String email) {
-        emailToCheck.click();
-        emailToCheck.sendKeys(email);
-        return this;
-    }
-
-    public CreateTicketPage viewTicketButton() {
-        viewTicketButton.click();
-        return this;
-    }
-
-    /*    public CreateTicketPage createTicket() {
-            return createTicket("Default summary", "Default description");
-        }*/
-
-/*    public CreateTicketPage createTicket(String summary, String description) {
-        queueField.click();
-        productIssueOption.click();
-        problemSummary.sendKeys(summary);
-        problemDescription.sendKeys(description);
-        return this;
-    }*/
 }
