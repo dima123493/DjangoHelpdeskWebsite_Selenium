@@ -4,9 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class AllTicketsPage {
@@ -64,25 +62,18 @@ public class AllTicketsPage {
 
     public int amountOfElements() {
         return tbody.findElements(By.xpath("//*[@id=\"ticketTable\"]/tbody//a")).size();
-/*        List<WebElement> elements = tbody.findElements(By.xpath("//tr"));
-        List<String> allElements = new ArrayList<>();
-        int amount = 0;
-        for (WebElement element : elements) {
-            allElements.add(element.getText());
-            amount++;
-        }
-        return amount;*/
     }
 
     public Optional<String> linkOfNewlyCreatedTicket(String summary) {
         List<WebElement> elements = tbody.findElements(By.xpath("//*[@id=\"ticketTable\"]/tbody//a"));
-        Map<String, String> values = new HashMap<>();
         for (WebElement element : elements) {
-            String title = element.getText();
-            String link = element.getAttribute("href");
-            values.put(title,link);
+            String link;
+            if(element.getText().contains(summary)) {
+                link = element.getAttribute("href");
+                return Optional.of(link);
+            }
         }
-        return values.entrySet().stream().filter(key -> key.getKey().contains(summary)).map(Map.Entry::getValue).findFirst();
+        return Optional.empty();
     }
 
     public AllTicketsPage searchField(String searchQuery) {

@@ -32,8 +32,8 @@ public class Navigator {
         return initElements(driver, AllTicketsPage.class);
     }
 
-    public static ChosenTicketPage openChosenTicketPage() {
-        driver.navigate().to(ConfigProvider.LOGIN_URL);
+    public static ChosenTicketPage openChosenTicketPage(String urlToTicket) {
+        driver.navigate().to(urlToTicket);
         return initElements(driver, ChosenTicketPage.class);
     }
 }

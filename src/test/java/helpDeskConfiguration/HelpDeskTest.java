@@ -3,16 +3,15 @@ package helpDeskConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import pages.AllTicketsPage;
-import pages.CreatedTicketDetails;
-import pages.HomePage;
-import pages.LoginPage;
+import pages.*;
 import seleniumCofiguration.Selenium;
 import utils.Navigator;
 import utils.TestValues;
 
 import java.io.IOException;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static utils.StringUniqualizer.createUniqueString;
 
 class HelpDeskTest extends Selenium {
@@ -69,7 +68,7 @@ class HelpDeskTest extends Selenium {
     @Test
     void checkBoxIsSelected() {
         LoginPage page = Navigator.openLoginPage();
-        Assertions.assertTrue(page.rememberPasswordCheckbox().rememberPasswordCheckbox.isSelected());
+        assertTrue(page.rememberPasswordCheckbox().rememberPasswordCheckbox.isSelected());
     }
 
     @Test
@@ -91,7 +90,7 @@ class HelpDeskTest extends Selenium {
                 .rememberPasswordCheckbox()
                 .loginButtonFailedTest();
 
-        Assertions.assertTrue(page.loginButton.isDisplayed());
+        assertTrue(page.loginButton.isDisplayed());
     }
 
     @Test
@@ -107,7 +106,7 @@ class HelpDeskTest extends Selenium {
 
         page.userFieldDropdown().logoutButton();
         HomePage homePage = Navigator.openMainPage();
-        Assertions.assertTrue(homePage.emailToCheck.isDisplayed());
+        assertTrue(homePage.emailToCheck.isDisplayed());
     }
 
     @Test
@@ -144,8 +143,48 @@ class HelpDeskTest extends Selenium {
 
         AllTicketsPage page = Navigator.openAllTicketsPage();
         page.searchField(summary).searchGoButton();
-        linkOfNewlyCreatedTicket = String.valueOf(page.linkOfNewlyCreatedTicket(summary));
-        Assertions.assertNotNull(linkOfNewlyCreatedTicket);
+        Optional<String> refToLink = page.linkOfNewlyCreatedTicket(summary);
+        assertTrue(refToLink.isPresent());
+        linkOfNewlyCreatedTicket = refToLink.get();
+    }
+
+    @Test
+    void resolveCreatedTicket() {
+        String description = "Resolve Created Ticket";
+        String email = "test@email.com";
+        String resolutionComment = "Your issue has been resolved. Thank you! Have a nice day!";
+        String header = "Resolved";
+        String headerText = summary;
+        Navigator.createTicketPage().queueField().selectProductIssueOption()
+                .problemSummary(headerText)
+                .problemDescription(description)
+                .priority()
+                .deadLine()
+                .emailSubmit(email)
+                .submitButton();
+
+        LoginPage loginPage = Navigator.openLoginPage();
+        loginPage.usernameField(ConfigProvider.USER_LOGIN)
+                .passwordField(ConfigProvider.USER_PASSWORD)
+                .rememberPasswordCheckbox()
+                .loginButton();
+
+        AllTicketsPage page = Navigator.openAllTicketsPage();
+        page.searchField(headerText).searchGoButton();
+        linkOfNewlyCreatedTicket = page.linkOfNewlyCreatedTicket(headerText).get();
+
+        ChosenTicketPage chosenPage = Navigator.openChosenTicketPage(linkOfNewlyCreatedTicket);
+        System.out.println(chosenPage.submitterEmail().trim());
+        System.out.println(chosenPage.submitterDescription().trim());
+        if(chosenPage.submitterEmail().trim().equals(email)
+           && chosenPage.submitterDescription().equals(description)){
+            chosenPage
+                    .resolutionCommentField(resolutionComment)
+                    .resolvedStatusRadioButton()
+                    .makePublicCheckbox()
+                    .updateTicketButton();
+        }
+        assertTrue(chosenPage.checkProblemHeader(header));
     }
 
     @Test
